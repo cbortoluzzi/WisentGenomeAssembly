@@ -51,5 +51,3 @@ fastqc $fastq_1 $fastq_2 -o $outDir/fastqc --extract -f fastq -d /tmp/
 # We will also run fastq-stat as this program outputs some additional statistics that might be of interest
 fastq-stat --sampleid $sample --result $outDir/fastqc/$sample.csv --plot $fastq_1 $fastq_2
 
-
-
