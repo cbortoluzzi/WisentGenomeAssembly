@@ -18,10 +18,10 @@ then
         echo -e "DESCRIPTION: This script aligns the paired-end runs of an individual to the reference genome to generate an alignment in BAM format\n\n"
 
         echo -e "INPUT:         <reference genome in FASTA format>      Reference genome assembly in FASTA format"
-        echo -e "               <paired-end run R1 in FASTQ format>     First paired-end run in FASTQ format""
+        echo -e "               <paired-end run R1 in FASTQ format>     First paired-end run in FASTQ format"
         echo -e "               <paired-end run R2 in FASTQ format>     Second paired-end run in FASTQ format"
         echo -e "               <sample name>                           Name of sample. This is the name that will appear in the VCF file"
-	echo -e "		<output  directory>			Name of the output directory\n\n"
+	echo -e "		<output directory>			Name of the output directory\n\n"
 
         echo -e "OUTPUT:        <an aligned and sorted BAM file for each paired-end runs>"
         echo -e "               <a QC report>\n\n"
