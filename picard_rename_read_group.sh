@@ -21,9 +21,9 @@ then
         echo -e "               <read group>                          New read group code/name"
         echo -e "               <sample name>                         New sample code/name\n\n"
 
-        echo -e "OUTPUT:        <two reports, one per paired-end run, and one for both paired-end runs combined>\n\n"
+        echo -e "OUTPUT:        <a new BAM file with renamed read group and sample id>\n\n"
         
-       	echo -e "REQUIRES:      Requires Picard (v2.25.7) and Samtools (v1.15.1) module available from PATH\n\n"
+       	echo -e "REQUIRES:      Requires picard (v2.25.7) and samtools (v1.15.1) module available from PATH\n\n"
 
         exit
 fi
@@ -40,8 +40,9 @@ module load samtools/1.15.1
 
 
 # Run AddOrReplaceReadGroups on the alignment in BAM format
-# Example:
+# Example run: 
 # picard AddOrReplaceReadGroups I=WISENTM_Urim.sort.bam O=WISENTM_Urim.sort.rm.bam RGID=HWNJ3DSX10.1 RGPL=illumina RGLB=1 RGPU=unknown RGSM=WISENTM_Urim
+
 output=`echo $bam | sed 's/.sort.bam/.sort.rm.bam/g'`
 picard AddOrReplaceReadGroups I=$bam O=$output RGID=$RGID RGPL=illumina RGLB=1 RGPU=unknown RGSM=$RGSM
 samtools index -@ 10 $output
