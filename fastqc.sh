@@ -23,7 +23,7 @@ then
         echo -e "               <paired-end run R2 in FASTQ format>   Second paired end FASTQ file"
         echo -e "               <output directory>                    Name of output directory\n\n"
 
-        echo -e "OUTPUT:        <a report, one per paired-end run>\n\n"
+        echo -e "OUTPUT:        <two reports, one per paired-end run, and one for both paired-end run combined>\n\n"
         
         echo -e "REQUIRES:      Requires FastQC (v0.11.9) module available from PATH\n\n"
 
