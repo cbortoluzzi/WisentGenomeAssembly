@@ -42,7 +42,7 @@ module load samtools/1.15.1
 # Run AddOrReplaceReadGroups on the alignment in BAM format
 # Example:
 # picard AddOrReplaceReadGroups I=WISENTM_Urim.sort.bam O=WISENTM_Urim.sort.rm.bam RGID=HWNJ3DSX10.1 RGPL=illumina RGLB=1 RGPU=unknown RGSM=WISENTM_Urim
-output=`echo $bam | sed 's/.bam/.rm.bam/g'`
+output=`echo $bam | sed 's/.sort.bam/.sort.rm.bam/g'`
 picard AddOrReplaceReadGroups I=$bam O=$output RGID=$RGID RGPL=illumina RGLB=1 RGPU=unknown RGSM=$RGSM
 samtools index -@ 10 $output
 
