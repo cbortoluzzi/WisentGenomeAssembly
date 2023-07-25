@@ -19,8 +19,8 @@ then
         echo -e "DESCRIPTION: This script takes a pair of fastq files and outputs a QC report\n\n"
 
         echo -e "INPUT:         <sample name>                         Code or name to identify the sample"
-        echo -e "               <paired-end R1 in FASTQ format>   First paired end FASTQ file"
-        echo -e "               <paired-end R2 in FASTQ format>   Second paired end FASTQ file"
+        echo -e "               <paired-end R1 in FASTQ format>       First paired-end run in FASTQ format"
+        echo -e "               <paired-end R2 in FASTQ format>       Second paired-end run in FASTQ format"
         echo -e "               <output directory>                    Name of output directory\n\n"
 
         echo -e "OUTPUT:        <two reports, one per paired-end run, and one for both paired-end runs combined>\n\n"
