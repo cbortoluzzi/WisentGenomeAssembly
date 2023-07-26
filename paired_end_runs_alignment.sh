@@ -12,16 +12,15 @@
 #SBATCH --error=error_%J
 
 
-if [ $# -ne 5 ]
+if [ $# -ne 4 ]
 then
-    	echo -e "\nusage: `basename $0` <reference genome in FASTA format> <paired-end run R1 in FASTQ format> <paired-end run R2 in FASTQ format> <sample name> <output directory>\n"
+    	echo -e "\nusage: `basename $0` <reference genome in FASTA format> <paired-end run R1 in FASTQ format> <paired-end run R2 in FASTQ format> <sample name>\n"
         echo -e "DESCRIPTION: This script aligns the paired-end runs of an individual to the reference genome to generate an alignment in BAM format\n\n"
 
         echo -e "INPUT:         <reference genome in FASTA format>      Reference genome assembly in FASTA format"
         echo -e "               <paired-end run R1 in FASTQ format>     First paired-end run in FASTQ format"
         echo -e "               <paired-end run R2 in FASTQ format>     Second paired-end run in FASTQ format"
-        echo -e "               <sample name>                           Name of sample. This is the name that will appear in the VCF file"
-	echo -e "		<output directory>			Name of the output directory\n\n"
+        echo -e "               <sample name>                           Name of sample. This is the name that will appear in the VCF file\n\n"
 
         echo -e "OUTPUT:        <an aligned and sorted BAM file for each paired-end runs>"
         echo -e "               <a QC report>\n\n"
@@ -36,7 +35,6 @@ ref=$1
 fastq_1=$2
 fastq_2=$3
 sample=$4
-outDir=$5
 
 
 # Export path to Qualimap v2.3
@@ -50,7 +48,7 @@ module load bamtools
 module load openjdk/14.0.2
 
 
-mkdir -p $outDir/bam
+mkdir -p bam
 
 
 name=$(basename $fastq_1 | sed 's/_1.fastq.gz//g' | sed 's/_R1.fastq.gz//g')
@@ -75,9 +73,9 @@ fi
 
 # Align paired-end runs to reference genome
 # We will couple BWA mem with samblaster to mark duplicate reads and samtools view to output a BAM file
-if [[ ! -f $outDir/bam/$name.bam ]];then
+if [[ ! -f bam/$name.bam ]];then
 	echo -e "Aligned BAM file not found for $sample. Making it now...this might take some time\n\n"
-	bwa mem -t 16 -T 20 -R "@RG\tID:$flowcell.$lane\tPL:illumina\tSM:$name\tPU:unknown\tCN:ETH" $unmasked.rm.fasta $fastq_1 $fastq_2 | samblaster | samtools view -Sb - > $outDir/bam/$name.bam
+	bwa mem -t 16 -T 20 -R "@RG\tID:$flowcell.$lane\tPL:illumina\tSM:$name\tPU:unknown\tCN:ETH" $unmasked.rm.fasta $fastq_1 $fastq_2 | samblaster | samtools view -Sb - > bam/$name.bam
 fi
 
 # I have lowered the minimum score to output to 20 [default: 30]
@@ -90,24 +88,24 @@ fi
 
 
 # Sort coordinates with sambamba
-if [[ ! -f $outDir/bam/$name.sort.bam ]];then
+if [[ ! -f bam/$name.sort.bam ]];then
 	echo -e "Sorted BAM file not found. Making it now\n\n"
-	sambamba sort -t 16 --tmpdir /tmp/ -m 10G -o $outDir/bam/$name.sort.bam $outDir/bam/$name.bam
+	sambamba sort -t 16 --tmpdir /tmp/ -m 10G -o bam/$name.sort.bam bam/$name.bam
 fi
 
 
 # Generate alignment statistics with bamtools
-if [[ ! -f $outDir/bam/$name.sort.stats.csv ]];then
+if [[ ! -f bam/$name.sort.stats.csv ]];then
 	echo -e "Statistics not calculated. Calculating them now\n\n"
-	bamtools stats -in $outDir/bam/$name.sort.bam > $outDir/bam/$name.sort.stats.csv
+	bamtools stats -in bam/$name.sort.bam > bam/$name.sort.stats.csv
 fi
 
 
 # Generate another set of statistics with Qualimap
-mkdir -p $outDir/bam/$name
-if [[ ! -f $outDir/bam/$name/genome_results.txt ]];then
+mkdir -p bam/$name
+if [[ ! -f bam/$name/genome_results.txt ]];then
 	echo -e "Statistics not calculated. Calculating them now\n\n"
-	qualimap bamqc --java-mem-size=16G -bam $outDir/bam/$name.sort.bam -nt 16 -nw 500 -outdir $outDir/bam/$name
+	qualimap bamqc --java-mem-size=16G -bam bam/$name.sort.bam -nt 16 -nw 500 -outdir bam/$name
 fi
 
 echo -e "Done!\n\n"
