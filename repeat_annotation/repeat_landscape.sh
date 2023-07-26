@@ -12,12 +12,16 @@
 #SBATCH --error=error_%J
 
 
-align=$1
-repeat_library=$2
+export PATH=/cluster/work/pausch/cbortoluzzi/softwares/RepeatMasker/util:$PATH
 
+aln=$1
+lib=$2
 
-#This creates an additional file "new_alignment_file.align" which contains the added Kimura divergence field after each alignment.
-../../softwares/RepeatMasker/util/calcDivergenceFromAlign.pl -s example.divsum -a new_alignment_file.align $align
+name=$(basename $aln | sed 's/.fasta.align//g' | sed 's/.fa.align//g')
 
-# Create a Repeat Landscape graph using the divergence summary data generated with the calcDivergenceFromAlign.pl script.
-../../softwares/RepeatMasker/util/createRepeatLandscape.pl -div example.divsum -g 2628394923 > example.html
+# Calculate Kimura divergence corrected for GC content
+calcDivergenceFromAlign.pl -s $name.divsum -a $name.new.align $aln
+
+# Create a repeat landscape graph using the divergence summary data generated with the calcDivergenceFromAlign.pl script; 2564834688 is the genome size of the B. bonasus
+createRepeatLandscape.pl -div $name.divsum -g 2564834688 > $name.html
+
