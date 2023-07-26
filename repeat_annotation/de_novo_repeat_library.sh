@@ -19,8 +19,8 @@ then
 
 	echo -e "INPUT:          <reference genome in FASTA format>      Reference genome assembly in FASTA format"
 	echo -e "                <output directory>                      Name of output directory\n\n"
-
-  echo -e "OUTPUT:        <a RepeatModeler BLAST database>"
+ 	
+  	echo -e "OUTPUT:        <a RepeatModeler BLAST database>"
 	echo -e "               <a de novo repeat library>"
 
 	echo -e "REQUIRES:      Requires RepeatModeler (v2.0.4), samtools (v1.15.1) and Genometools (v1.6.2) accessible from PATH\n\n"
@@ -52,7 +52,6 @@ cd $outDir/RepeatModeler
 if [[ ! -f $name.nhr ]]; then
 	echo -e "BLAST database not found. Building it...this might take some time\n\n"
 	BuildDatabase -name $name -engine ncbi -dir $outDir
-	mv $name.n* $name.translation $outDir/RepeatModeler
 fi
 
 
