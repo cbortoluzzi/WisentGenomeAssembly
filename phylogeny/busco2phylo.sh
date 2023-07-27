@@ -40,32 +40,37 @@ list_assembly=$1
 
 num_genomes=`wc -l $list_assembly | awk '{print $1}'`
 
-cat $list_assembly | while read species; do cat /cluster/work/pausch/cbortoluzzi/wisent_project/assemblies/$species/mammalia_odb10/run_mammalia_odb10/full_table.tsv | grep -v '^#' | awk '$2 == "Complete"{print $1}' >> complete_busco_ids.txt;done
+cat $list_assembly | sed 's/.fasta/.busco/g' |  sed 's/.fa/.busco/g' | while read assembly;do cat $assembly/mammalia_odb10/run_mammalia_odb10/full_table.tsv | grep -v '^#' | awk '$2 == "Complete"{print $1}' >> complete_busco_ids.txt; done
 sort complete_busco_ids.txt | uniq -c | awk '$1=="'$num_genomes'"{print $2}' > final_busco_ids.txt
 
-mkdir -p $outDir && mkdir -p $outDir/mafft && mkdir -p $outDir/trimal
+
+mkdir -p mafft && mkdir -p trimal
 
 cat final_busco_ids.txt | while read busco_id;do
-	mkdir -p $outDir/fasta/$busco_id
-	cat $list_species | while read species;do
-		for faa in /cluster/work/pausch/cbortoluzzi/wisent_project/assemblies/$species/mammalia_odb10/run_mammalia_odb10/busco_sequences/single_copy_busco_sequences/$busco_id.faa
+
+ 	# Obtain protein sequence for those BUSCO genes that are comple, sigle copy and are present in all species included in the dataset
+	mkdir -p fasta/$busco_id
+	cat $list_assembly | sed 's/.fasta/.busco/g' |  sed 's/.fa/.busco/g' | while read assembly;do
+		for faa in $assembly/mammalia_odb10/run_mammalia_odb10/busco_sequences/single_copy_busco_sequences/$busco_id.faa
 		do
 			cat $faa | awk '/^>/{print ">'$species'"; next}{print}' > $outDir/fasta/$busco_id/$species.$busco_id.fa
 		done
-	cat $outDir/fasta/$busco_id/*.fa >> $outDir/mafft/$busco_id.aln
-	# Align protein sequences with MAFFT
-	mafft --amino $outDir/mafft/$busco_id.aln > $outDir/mafft/$busco_id.aln.mafft
-	rm $outDir/mafft/$busco_id.aln
-	# Trim alignments with trimAL
-	trimal -in $outDir/mafft/$busco_id.aln.mafft -out $outDir/trimal/$busco_id.aln.mafft.trimal -gt 0.8 -st 0.001
+	cat fasta/$busco_id/*.fa >> mafft/$busco_id.aln
+
+ 	# Align protein sequences with MAFFT
+	mafft --amino mafft/$busco_id.aln > mafft/$busco_id.aln.mafft
+	rm mafft/$busco_id.aln
+
+ 	# Trim alignments with trimAL
+	trimal -in mafft/$busco_id.aln.mafft -out trimal/$busco_id.aln.mafft.trimal -gt 0.8 -st 0.001
 done
 
 
 # Generate supermatrix
-mkdir -p $outDir/matrix
-python3 superalignment.py --i $outDir/trimal --o $outDir/matrix
+mkdir -p matrix
+python3 superalignment.py --i trimal --o matrix
 
 
 # Run Raxml with 1,000 bootstraps
-raxmlHPC-SSE3 -T 16 -f a -m PROTGAMMAJTT -N 1000 -n my_busco_phylo -s $outDir/matrix/supermatrix.aln.mafft.trimal.fa -p 13432 -x 89090
+raxmlHPC-SSE3 -T 16 -f a -m PROTGAMMAJTT -N 1000 -n my_busco_phylo -s matrix/supermatrix.aln.mafft.trimal.fa -p 13432 -x 89090
 
