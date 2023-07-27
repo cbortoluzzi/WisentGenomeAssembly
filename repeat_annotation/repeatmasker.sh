@@ -35,7 +35,7 @@ export PATH=/cluster/work/pausch/cbortoluzzi/softwares/RepeatMasker:$PATH
 
 
 library=$1
-reference5=$2
+reference=$2
 
 
 # Run RepeatMasker
