@@ -30,7 +30,6 @@ fi
 
 
 reference=$1
-output_directory=$2
 
 
 name=$(basename $reference | sed 's/.fasta//g' | sed 's/.fa//g' | sed 's/.fasta.gz//g' | sed 's/.fa.gz//g')
