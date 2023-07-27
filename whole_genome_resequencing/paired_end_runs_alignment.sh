@@ -37,9 +37,9 @@ fastq_2=$3
 sample=$4
 
 
-
 # Export path to Qualimap v2.3
 export PATH=/cluster/work/pausch/cbortoluzzi/softwares/qualimap_v2.3:$PATH
+
 
 # Load modules
 module load bwa/0.7.17
