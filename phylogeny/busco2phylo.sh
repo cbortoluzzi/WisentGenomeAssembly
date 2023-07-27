@@ -20,7 +20,7 @@ then
 	echo -e "INPUT:         <list of assemblies>     A text file with the name of all assemblies to include in the phylogenetic tree, one per line\n\n"
  
 	echo -e "OUTPUT:        <a supermatrix>          A supermatrix containing the aa sequence of all complete, single copy BUSCO genes\n"
-  echo -e "               <a phylogenetic tree>    A phylogenetic tree obtained from RAxML after 1,000 bootstraps\n\n"
+ 	echo -e "               <a phylogenetic tree>    A phylogenetic tree obtained from RAxML after 1,000 bootstraps\n\n"
 
 	echo -e "REQUIRES:      Requires mafft (v7.490), trimAl (), and RAxML () available from PATH\n\n"
 
