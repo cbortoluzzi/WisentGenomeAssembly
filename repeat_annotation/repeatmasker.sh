@@ -33,12 +33,13 @@ fi
 
 export PATH=/cluster/work/pausch/cbortoluzzi/softwares/RepeatMasker:$PATH
 
+
 library=$1
-ref=$2
+reference5=$2
 
 
 # Run RepeatMasker
-outDir=$(dirname $library)
-mkdir -p $outDir/RepeatMasker
-RepeatMasker -e rmblast -pa 10 -s -lib $library -dir $outDir/RepeatMasker -a -xsmall -gff $ref
+mkdir -p repeat_annotation
+
+RepeatMasker -e rmblast -pa 10 -s -lib $library -dir repeat_annotation -a -xsmall -gff $reference
 
