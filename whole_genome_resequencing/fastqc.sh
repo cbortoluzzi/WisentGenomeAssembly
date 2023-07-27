@@ -34,7 +34,7 @@ fi
 sample=$1
 fastq_1=$2
 fastq_2=$3
-outDir=$4
+
 
 
 # Load module
