@@ -22,7 +22,7 @@ then
 	echo -e "OUTPUT:        <a supermatrix>          A supermatrix containing the aa sequence of all complete, single copy BUSCO genes\n"
  	echo -e "               <a phylogenetic tree>    A phylogenetic tree obtained from RAxML after 1,000 bootstraps\n\n"
 
-	echo -e "REQUIRES:      Requires mafft (v7.490), trimAl (), and RAxML () available from PATH\n\n"
+	echo -e "REQUIRES:      Requires mafft (v7.490), trimAl (v1.4.rev22), and RAxML (v8.2.12) available from PATH\n\n"
 
   exit
 fi
