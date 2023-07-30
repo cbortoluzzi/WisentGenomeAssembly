@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 
@@ -15,7 +16,7 @@
 if [ $# -ne 1 ]
 then
     	echo -e "\nusage: `basename $0` <VCF>\n"
-        echo -e "DESCRIPTION: This script generates an aligned and sorted BAM file for each set of paired reads. This script also runs QualiMap on the final BAM file to evalute its quality\n\n"
+        echo -e "DESCRIPTION: This script calculates a relatedness statistic (e.g., KING) among all individuals included in the VCF file\n\n"
 
         echo -e "INPUT:           <VCF>        A VCF input file (all chromosomes)\n\n"
 
@@ -32,15 +33,21 @@ fi
 module load bcftools/1.6
 module load vcftools
 
+
 vcf=$1
 output=`echo $vcf | sed 's/.vcf.gz/.biallelic.noindels.vcf.gz/g'`
 
+
 # Retain only biallelic SNPs and remove indels = this VCF file will be used for many downstream analyses and for further data pruning depending on the type of analysis
+echo -e "Obtain a VCF file with only bi-allelic SNPs\n\n"
 vcftools --gzvcf $vcf --remove-indels --min-alleles 2 --max-alleles 2 --recode --recode-INFO-all --stdout | bgzip -c > $output
-bcftools stats $output > $output.stats
+
 
 # Calculate relatedness with the --relatedness2 option in VCFTools
+echo -e "Calculate relatedness statistic\n\n"
 mkdir -p relatedness
 vcftools --gzvcf $output --relatedness2 --out relatedness/relatedness
+
+
 
 
