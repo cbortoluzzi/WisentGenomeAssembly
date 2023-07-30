@@ -11,6 +11,18 @@
 #SBATCH --output=output_%J
 #SBATCH --error=error_%J
 
+if [ $# -ne 2 ]
+then
+    	echo -e "\nusage: `basename $0` <reference genome in FASTA format> <protein sequence>\n"
+        echo -e "DESCRIPTION: This script runs GALBA for genome annotation\n\n"
+
+        echo -e "INPUT:           <reference genome in FASTA format>      Reference genome in FASTA format (soft-masked)"
+        echo -e "                 <protein sequence>                      Protein sequence to use in the annotation step\n\n"
+
+        echo -e "OUTPUT:          <Annotation in GTF format>\n\n"
+        
+        exit
+fi
 
 
 export PATH=/cluster/work/pausch/cbortoluzzi/softwares/GALBA-1.0.7:$PATH
@@ -39,15 +51,17 @@ module load diamond
 module load exonerate
 module load bamtools
 
+ref=$1
+prot=$2
 
 # Run GALBA using the protein sequence of Bos taurus
 echo -e "Run GALBA ... this might take a few days\n\n"
-perl /cluster/work/pausch/cbortoluzzi/softwares/GALBA-1.0.7/scripts/galba.pl --species=Bison_bonasus --genome=/cluster/work/pausch/cbortoluzzi/wisent_project/repeat_annotation/Bison_bonasus/RepeatMasker/WISENTM_Urano_F1.hap1.rm.unmasked.fasta.masked --prot_seq=/cluster/work/pausch/alex/REF_DATA/Bos_taurus.ARS-UCD1.2.109.proteins.fa --threads=4 --workingdir=/cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1
+perl /cluster/work/pausch/cbortoluzzi/softwares/GALBA-1.0.7/scripts/galba.pl --species=Bison_bonasus --genome=$ref --prot_seq=$prot --threads=4 --workingdir=/cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1
 
 # Reducing noise in augustus.hints.gtf with TSEBRA
 echo -e "Reduce noise with TSEBRA\n\n"
 python3 /cluster/work/pausch/cbortoluzzi/softwares/TSEBRA-v.1.1.1/bin/tsebra.py -g /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/augustus.hints.gff -e /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/hintsfile.gff -o /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/galba.gtf > /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/tsebra.log 2> /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/errors/tsebra.err
-python3 /cluster/work/pausch/cbortoluzzi/softwares/Augustus-3.5.0/scripts/getAnnoFastaFromJoingenes.py -g /cluster/work/pausch/cbortoluzzi/wisent_project/repeat_annotation/Bison_bonasus/RepeatMasker/WISENTM_Urano_F1.hap1.rm.unmasked.fasta.masked -f /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/galba.gtf -o /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/galba 1>/cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/getAnnoFastaFromJoingenes.tsebra.stdout 2> /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/errors/getAnnoFastaFromJoingenes.tsebra.stderr
+python3 /cluster/work/pausch/cbortoluzzi/softwares/Augustus-3.5.0/scripts/getAnnoFastaFromJoingenes.py -g $ref -f /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/galba.gtf -o /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/galba 1>/cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/getAnnoFastaFromJoingenes.tsebra.stdout 2> /cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_1/errors/getAnnoFastaFromJoingenes.tsebra.stderr
 
 echo -e "# IMPORTANT INFORMATION: the final output files of this GALBA run are galba.gtf, galba.aa, and galba.codingseq"
 echo -e "This gene set is a result of running TSEBRA. In rare cases, the tsebra gene set may be too small due to a lack of evidence. In these cases, please compare to the augustus.hints.gtf gene set and use the one that is better"
