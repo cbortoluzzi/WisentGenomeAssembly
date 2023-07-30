@@ -11,7 +11,18 @@
 #SBATCH --output=output_%J
 #SBATCH --error=error_%J
 
+if [ $# -ne 2 ]
+then
+    	echo -e "\nusage: `basename $0` <reference genome in FASTA format> <protein sequence>\n"
+        echo -e "DESCRIPTION: This script runs GALBA for genome annotation\n\n"
 
+        echo -e "INPUT:           <reference genome in FASTA format>      Reference genome in FASTA format (soft-masked)"
+        echo -e "                 <protein sequence>                      Protein sequence to use in the annotation step\n\n"
+
+        echo -e "OUTPUT:          <Annotation in GTF format>\n\n"
+        
+        exit
+fi
 
 export PATH=/cluster/work/pausch/cbortoluzzi/softwares/GALBA-1.0.7:$PATH
 export PATH=/cluster/work/pausch/cbortoluzzi/softwares/GALBA-1.0.7/scripts:$PATH
@@ -40,9 +51,12 @@ module load exonerate
 module load bamtools
 
 
+ref=$1
+prot=$2
+
 # Run GALBA using the protein sequences of Bos taurus, Ovis aries, and Capra hircus
 echo -e "Run GALBA ... this might take a few days\n\n"
-perl /cluster/work/pausch/cbortoluzzi/softwares/GALBA-1.0.7/scripts/galba.pl --species=Bison_bonasus --genome=/cluster/work/pausch/cbortoluzzi/wisent_project/repeat_annotation/Bison_bonasus/RepeatMasker/WISENTM_Urano_F1.hap1.rm.unmasked.fasta.masked --prot_seq=/cluster/work/pausch/cbortoluzzi/wisent_project/annotation/proteins.fa --threads=4 --workingdir=/cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_2
+perl /cluster/work/pausch/cbortoluzzi/softwares/GALBA-1.0.7/scripts/galba.pl --species=Bison_bonasus --genome=$ref --prot_seq=$prot --threads=4 --workingdir=/cluster/work/pausch/cbortoluzzi/wisent_project/annotation/WISENTM_Urano_F1_hap1/run_2
 
 # Reducing noise in augustus.hints.gtf with TSEBRA
 echo -e "Reduce noise with TSEBRA\n\n"
