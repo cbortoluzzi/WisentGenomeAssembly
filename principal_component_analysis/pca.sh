@@ -42,4 +42,4 @@ echo -e "Filter out the water buffalo sample\n\n"
 vcftools --gzvcf $vcf --remove-indv Water_buffalo --recode --recode-INFO-all --stdout | bgzip -c > $name.noWaterBuffalo.vcf.gz
 
 echo -e "Generate a principal component analysis on a set of bi-allelic SNPs present in all samples and filtered for LD and a MAF < 5%\n\n"
-plink --vcf $name.noWaterBuffalo.vcf.gz --pca --double-id --chr-set 29 --allow-extra-chr --threads 10 --indep-pairwise 50 10 0.2 --maf 0.05 --geno 0 --out pca/PCA.noWaterBuffalo
+plink --vcf $name.noWaterBuffalo.vcf.gz --pca --double-id --chr-set 29 --allow-extra-chr --threads 10 --indep-pairwise 50 10 0.2 --maf 0.05 --geno 0 --recode vcf --out pca/PCA.noWaterBuffalo
