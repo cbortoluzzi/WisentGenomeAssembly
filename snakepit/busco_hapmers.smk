@@ -53,3 +53,13 @@ rule sort_missing_busco:
         bedtools multiinter -cluster -i {input} > {output}
         '''
 
+rule odgi_pav:
+    input:
+        'graphs/{chromosome}.pggb.og'
+    output:
+        'graphs/{chromosome}.pggb.pav'
+    shell:
+        '''
+        bedtools makewindows -g WIS_primary#0#17.fa.fai -w 100000 > windows.bed
+        odgi pav -i {input} -t 1 -b windows.bed -M > {output}
+        '''
