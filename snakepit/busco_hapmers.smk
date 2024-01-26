@@ -50,19 +50,31 @@ rule sort_missing_busco:
     localrule: True
     shell:
         '''
-
         LC_ALL=C
-        #grep -Ff <(cut -f 4 {input[0]}) {input[1]} | sort -k1,1V -k2,2n > hap1_primary.match.bed
-        #grep -vFf <(cut -f 4 {input[0]}) {input[1]} | sort -k1,1V -k2,2n > hap1_primary.missing.bed
-        #grep -Ff <(cut -f 4 {input[2]}) {input[1]} | sort -k1,1V -k2,2n > hap2_primary.match.bed
-        #grep -vFf <(cut -f 4 {input[2]}) {input[1]} | sort -k1,1V -k2,2n > hap2_primary.missing.bed
-    
         grep -Ff <(cut -f 4 {input[0]}) {input[1]} | bedtools sort -i - > hap1_primary.match.bed
         grep -vFf <(cut -f 4 {input[0]}) {input[1]} | bedtools sort -i - > hap1_primary.missing.bed
         grep -Ff <(cut -f 4 {input[2]}) {input[1]} | bedtools sort -i - > hap2_primary.match.bed
         grep -vFf <(cut -f 4 {input[2]}) {input[1]} | bedtools sort -i - > hap2_primary.missing.bed
 
         comm -3 <(sort hap1_primary.match.bed) <(sort hap2_primary.match.bed) > {output}
+        '''
+
+rule odgi_inject:
+    input:
+        og = 'graphs/{chromosome}.pggb.og',
+        bed = rules.sort_missing_busco.output
+    output:
+        multiext('graphs/{chromosome}.pggb.injected','.og','.png','.bed')
+    localrule: True
+    shell:
+        '''
+        awk -F '\\t' -v OFS='\\t' -v C={wildcards.chromosome} '$1==""&&$2==C {{print "WIS_primary#0#"C,$3,$4,"MISSING_BUSCO_HAP1"}} {{if ($1==C) {{print "WIS_primary#0#"C,$2,$3,"MISSING_BUSCO_HAP2"}} }}' {input.bed} |\
+        sort -k1,1 -k2,2n |\
+        bedtools merge -i - -d 100000 -c 4 -o distinct |\
+        awk -v OFS='\\t' '{{ $4=$4"_"NR }}1'> {output[2]}
+
+        odgi inject -i {input.og} -o {output[0]} -b {output[2]}
+        odgi viz -i {output[0]} -o {output[1]}
         '''
 
 rule odgi_pav:
