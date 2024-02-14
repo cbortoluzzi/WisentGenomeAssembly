@@ -59,10 +59,23 @@ rule sort_missing_busco:
         comm -3 <(sort hap1_primary.match.bed) <(sort hap2_primary.match.bed) > {output}
         '''
 
+
+rule RoH:
+    input:
+        '/cluster/work/pausch/cbortoluzzi/wisent_project/popgen/primary_reference/roh_bortoluzzi/WISENTM_Urano.insideROH.txt'
+    output:
+        'graphs/WISENTM_Urano.{chromosome}.bed'
+    localrule: True
+    shell:
+        '''
+        awk -v OFS='\\t' -v C={wildcards.chromosome} '$5<1&&$1==C {{print "WIS_primary#0#"$1,$2,$3,"RoH_"NR}}' {input} > {output}
+        '''
+
 rule odgi_inject:
     input:
         og = 'graphs/{chromosome}.pggb.og',
-        bed = rules.sort_missing_busco.output
+        bed = rules.sort_missing_busco.output,
+        RoH = rules.RoH.output
     output:
         multiext('graphs/{chromosome}.pggb.injected','.og','.png','.bed')
     localrule: True
@@ -71,8 +84,9 @@ rule odgi_inject:
         awk -F '\\t' -v OFS='\\t' -v C={wildcards.chromosome} '$1==""&&$2==C {{print "WIS_primary#0#"C,$3,$4,"MISSING_BUSCO_HAP1"}} {{if ($1==C) {{print "WIS_primary#0#"C,$2,$3,"MISSING_BUSCO_HAP2"}} }}' {input.bed} |\
         sort -k1,1 -k2,2n |\
         bedtools merge -i - -d 100000 -c 4 -o distinct |\
-        awk -v OFS='\\t' '{{ $4=$4"_"NR }}1'> {output[2]}
+        awk -v OFS='\\t' '{{ $4=$4"_"NR }}1' > {output[2]}
 
+        cat {input.RoH} >> {output[2]}
         odgi inject -i {input.og} -o {output[0]} -b {output[2]}
         odgi viz -i {output[0]} -o {output[1]}
         '''
