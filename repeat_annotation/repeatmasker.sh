@@ -19,8 +19,9 @@ then
     	echo -e "\nusage: `basename $0` <a de novo repeat library> <reference genome in FASTA format>\n"
         echo -e "DESCRIPTION: This script runs RepeatMasker using as input the de-novo repeat library built from LTR retriever and RepeatModeler\n\n"
 
-        echo -e "INPUT:         <a de novo repeat library>            De-novo repeat library built from RepeatModeler\n"
-        echo -e "INPUT:         <reference genome in FASTA format>    Reference genome assembly in FASTA format\n\n"
+        echo -e "INPUT:         <a de novo repeat library>            De-novo repeat library built from RepeatModeler"
+        echo -e "               <reference genome in FASTA format>    Reference genome assembly in FASTA format\n\n"
+
 
         echo -e "OUTPUT:        <a masked reference genome assembly in FASTA format>\n\n"
 
@@ -31,15 +32,16 @@ fi
 
 
 
-export PATH=/cluster/work/pausch/cbortoluzzi/softwares/RepeatMasker:$PATH
+export PATH=/path/to/RepeatMasker:$PATH
 
 
 library=$1
 reference=$2
 
 
-# Run RepeatMasker
-mkdir -p repeat_annotation
+directory=$(dirname $library)
 
-RepeatMasker -e rmblast -pa 10 -s -lib $library -dir repeat_annotation -a -xsmall -gff $reference
+
+# Run RepeatMasker
+RepeatMasker -e rmblast -pa 10 -s -lib $library -dir $directory -a -xsmall -gff $reference
 
