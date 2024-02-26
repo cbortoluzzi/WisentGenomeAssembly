@@ -28,8 +28,6 @@ def parse_assembly_report(assembly_report):
 				# Save the Genbank accn as key and the chromosome number as value
 				if line[1] == "assembled-molecule":
 					mydict[line[4]] = line[2]
-				elif line[1] == "unplaced-scaffold":
-					mydict[line[4]] = line[0]
 				else:
 					mydict[line[4]] = line[0]
 	return mydict
@@ -41,37 +39,32 @@ def change_header_naming_fasta(mydict, fasta, output):
 	with open(output, "w") as output_f:
 		for record in SeqIO.parse(open_f, "fasta"):
 			header = record.id
-			if header in mydict.keys():
+			try:
 				new_header = mydict[header]
-				try:
-					# We will retain only the autosomes
-					if new_header == "Y" or new_header == "X" or isinstance(int(new_header), int):
-						record.id = new_header
-						record.description = ''
-						record.seq = record.seq.upper()
-						SeqIO.write(record, output_f, "fasta")
-					else:
-						pass
-				except ValueError:
-					print ("we are skipping:", new_header)
+				record.id = new_header
+				record.description = ''
+				#record.seq = record.seq.upper()
+				SeqIO.write(record, output_f, "fasta")
+			except KeyError:
+				record.id = header
+				record.description = ''
+				#record.seq = record.seq.upper()
+				SeqIO.write(record, output_f, "fasta")
+
 
 
 def unmask_genome(fasta, output):
 	open_f = open_fasta(fasta)
 	with open(output, 'w') as output_f:
 		for record in SeqIO.parse(open_f, 'fasta'):
-			record.seq = record.seq.upper()
-			try:
-				if record.id == "Y" or record.id == "X" or isinstance(int(record.id), int):
-					SeqIO.write(record, output_f, "fasta")
-				else:
-					pass
-			except ValueError:
-				print ("we are skipping:", record.id)
+			record.description = ''
+			#record.seq = record.seq.upper()
+			SeqIO.write(record, output_f, "fasta")
+
 
 
 def open_fasta(file):
-	if file.endswith('.fasta'):
+	if file.endswith('.fasta') or file.endswith('.fa'):
 		handle = open(file)
 	else:
 		handle = gzip.open(file, 'rt')
