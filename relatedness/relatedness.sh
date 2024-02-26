@@ -18,12 +18,12 @@ then
     	echo -e "\nusage: `basename $0` <VCF>\n"
         echo -e "DESCRIPTION: This script calculates a relatedness statistic (e.g., KING) among all individuals included in the VCF file\n\n"
 
-        echo -e "INPUT:           <VCF>        A VCF input file (all chromosomes)\n\n"
+        echo -e "INPUT:           <VCF>                           A VCF input file (all chromosomes)\n\n"
 
-        echo -e "OUTPUT:          <A filtered VCF file>       A filtered VCF file (bi-allelic SNPs, indels excluded)"
-        echo -e "                 <A relatedness statistics>  A relatedness statistic for each individual\n\n"
+        echo -e "OUTPUT:          <A filtered VCF file>           A filtered VCF file (bi-allelic SNPs, indels excluded)"
+        echo -e "                 <A relatedness statistics>      A relatedness statistic for each individual\n\n"
 
-        echo -e "REQUIRES:        Requires VCFTools (v0.1.16) and BCFtools (v1.6) available from PATH\n\n"
+        echo -e "REQUIRES:        Requires VCFtools (v0.1.16) and BCFtools (v1.6) available from PATH\n\n"
 
         exit
 fi
@@ -47,6 +47,9 @@ vcftools --gzvcf $vcf --remove-indels --min-alleles 2 --max-alleles 2 --recode -
 echo -e "Calculate relatedness statistic\n\n"
 mkdir -p relatedness
 vcftools --gzvcf $output --relatedness2 --out relatedness/relatedness
+
+# Plot relatedness as matrix
+Rscript plot_relatedness.R relatedness/relatedness.relatedness2
 
 
 
