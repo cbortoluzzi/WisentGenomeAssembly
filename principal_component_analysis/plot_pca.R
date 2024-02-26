@@ -23,7 +23,6 @@ ggsave('pca/percentage_variance_pca_noWaterBuffalo.pdf', width = 20, height = 20
 # calculate cumulative sum
 cumsum(pve$V1)
 pca$color <- c("#7570b3", "#7570b3", "#7570b3", "#7570b3", "#7570b3", "#7570b3", "#d95f02", "#d95f02", "#1b9e77", "#1b9e77", "#1b9e77", "#1b9e77", "#e7298a", "#e7298a", "#d95f02", "#d95f02")
-pca
 pca_p1_p2 <- ggplot(pca, aes(PC1, PC2))+geom_point(size = 5, fill = pca$color, alpha = 0.7, colour="black", pch = 21)+theme_bw()+theme(text = element_text(size = 16))
 pca_p1_p2 + xlab(paste0("Principal component analysis 1 (", signif(pve$V1[1], 3), "%)")) + ylab(paste0("Principal component analysis 2 (", signif(pve$V1[2], 3), "%)"))
 ggsave("pca/pca1_vs_pca2_noWaterBuffalo.pdf", width = 20, height = 20, units = "cm")
