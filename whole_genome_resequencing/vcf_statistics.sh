@@ -21,7 +21,7 @@ then
 
         echo -e "OUTPUT:        <A set of statistics as calculated by VCFtools>\n\n"
 
-        echo -e "REQUIRES:      Requires VCFTools (v0.1.16) available from PATH\n\n"
+        echo -e "REQUIRES:      Requires VCFtools (v0.1.16) available from PATH\n\n"
 
         exit
 fi
@@ -36,25 +36,25 @@ vcf=$1
 module load vcftools
 
 
-mkdir -p vcf_stats
+mkdir -p vcfstats
 
 
 echo -e "Calculate SNP density using a window of 100 Kb\n\n"
-vcftools --gzvcf $vcf --SNPdensity 100000 --out vcf_stats/$(basename $vcf)
+vcftools --gzvcf $vcf --SNPdensity 100000 --out vcfstats/$(basename $vcf)
 
 
 echo -e "Calculate per site SNP quality (as found in the QUAL column of the VCF file)\n\n"
-vcftools --gzvcf $vcf --site-quality --out vcf_stats/$(basename $vcf)
+vcftools --gzvcf $vcf --site-quality --out vcfstats/$(basename $vcf)
 
 
 echo -e "Calculte missingness on a per-individual basis\n\n"
-vcftools --gzvcf $vcf --missing-indv --out vcf_stats/$(basename $vcf)
+vcftools --gzvcf $vcf --missing-indv --out vcfstats/$(basename $vcf)
 
 
 echo -e "Calculate missingness on a per-site basis\n\n"
-vcftools --gzvcf $vcf --missing-site  --out vcf_stats/$(basename $vcf)
+vcftools --gzvcf $vcf --missing-site  --out vcfstats/$(basename $vcf)
 
 
 echo -e "Calculate mean depth per individual\n\n"
-vcftools --gzvcf $vcf --depth --out vcf_stats/$(basename $vcf)
+vcftools --gzvcf $vcf --depth --out vcfstats/$(basename $vcf)
 
