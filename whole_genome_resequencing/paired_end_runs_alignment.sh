@@ -25,7 +25,7 @@ then
         echo -e "OUTPUT:        <an aligned and sorted BAM file for each paired-end runs>"
         echo -e "               <a QC report>\n\n"
 
-        echo -e "REQUIRES:      Requires BWA (v0.7.17), sambamba (v0.8.1), samblaster (v0.1.24), bamtools (v.2.5.1), java (v14.0.2), and QualiMap (v2.3) available from PATH\n\n"
+        echo -e "REQUIRES:      Requires bwa (v0.7.17), sambamba (v0.8.1), samblaster (v0.1.24), bamtools (v.2.5.1), java (v14.0.2), and qualimap (v2.3) available from PATH\n\n"
 
         exit
 fi
@@ -76,7 +76,8 @@ fi
 # We will couple BWA mem with samblaster to mark duplicate reads and samtools view to output a BAM file
 if [[ ! -f bam/$name.bam ]];then
 	echo -e "Aligned BAM file not found for $sample. Making it now...this might take some time\n\n"
-	bwa mem -t 16 -T 20 -R "@RG\tID:$flowcell.$lane\tPL:illumina\tSM:$sample\tPU:unknown\tCN:ETH" $unmasked.rm.fasta $fastq_1 $fastq_2 | samblaster | samtools view -Sb - > bam/$name.bam
+	echo "@RG\tID:$flowcell.$lane\tPL:illumina\tSM:$sample\tPU:unknown\tCN:ETH"
+	bwa mem -t 16 -T 20 -R "@RG\tID:$name\tPL:illumina\tSM:$sample\tPU:unknown\tCN:ETH" $unmasked.rm.fasta $fastq_1 $fastq_2 | samblaster | samtools view -Sb - > bam/$name.bam
 fi
 
 # I have lowered the minimum score to output to 20 [default: 30]
@@ -110,3 +111,4 @@ if [[ ! -f $outDir/bam/$name/genome_results.txt ]];then
 fi
 
 echo -e "Done!\n\n"
+
