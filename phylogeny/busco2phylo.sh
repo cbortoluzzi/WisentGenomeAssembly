@@ -29,9 +29,9 @@ fi
 
 
 # Export paths
-export PATH=/cluster/work/pausch/cbortoluzzi/softwares/mafft-7.490-with-extensions/bin:$PATH
-export PATH=/cluster/work/pausch/cbortoluzzi/softwares/trimal/source:$PATH
-export PATH=/cluster/work/pausch/cbortoluzzi/softwares/standard-RAxML:$PATH
+export PATH=/path/to/mafft-7.490-with-extensions/bin:$PATH
+export PATH=/path/to/trimal/source:$PATH
+export PATH=/path/to/standard-RAxML:$PATH
 
 
 
@@ -73,4 +73,5 @@ python3 superalignment.py --i trimal --o matrix
 
 # Run Raxml with 1,000 bootstraps
 raxmlHPC-SSE3 -T 16 -f a -m PROTGAMMAJTT -N 1000 -n my_busco_phylo -s matrix/supermatrix.aln.mafft.trimal.fa -p 13432 -x 89090
+
 
