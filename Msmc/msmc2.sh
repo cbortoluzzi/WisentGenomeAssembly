@@ -15,18 +15,18 @@
 
 if [ $# -ne 3 ]
 then
-    	echo -e "\nusage: `basename $0` <reference genome in FASTA format> <bam> <genome coverage>\n"
-      echo -e "DESCRIPTION: This script estimates the demographic history of an individual using the MSMC2 approach\n\n"
+	echo -e "\nusage: `basename $0` <reference genome in FASTA format> <bam> <genome coverage>\n"
+      	echo -e "DESCRIPTION: This script estimates the demographic history of an individual using the MSMC2 approach\n\n"
 
-      echo -e "INPUT:         <reference genome in FASTA format>  A reference genome in FASTA format"
-      echo -e "               <bam>                               A bam file of the sample analysed"
-      echo -e "               <genome coverage>                   Genome coverage as estimated by Qualimap or samtools depth\n\n"
+      	echo -e "INPUT:         <reference genome in FASTA format>  A reference genome in FASTA format"
+      	echo -e "               <bam>                               A bam file of the sample analysed"
+      	echo -e "               <genome coverage>                   Genome coverage as estimated by Qualimap or samtools depth\n\n"
 
-      echo -e "OUTPUT:        <A reconstructed demographic history>\n\n"
+      	echo -e "OUTPUT:        <A reconstructed demographic history>\n\n"
 
-      echo -e "REQUIRES:      Requires BCFtools (1.16), bwa (v0.7.17), msmc2, and R (v4.2.2) available from PATH\n\n"
+      	echo -e "REQUIRES:      Requires BCFtools (1.16), bwa (v0.7.17), msmc2, and R (v4.2.2) available from PATH\n\n"
 
-      exit
+	exit
 fi
 
 
