@@ -5,8 +5,8 @@
 
 
 #SBATCH -n 8
-#SBATCH --time=3-24:00:00
-#SBATCH --mem-per-cpu=40000
+#SBATCH --time=2-24:00:00
+#SBATCH --mem-per-cpu=12000
 #SBATCH --job-name=BUSCO
 #SBATCH --output=output_%J
 #SBATCH --error=error_%J
@@ -34,19 +34,7 @@ lineage=$2
 
 outDir=$(basename $genome | sed 's/.fasta/.busco/g' |  sed 's/.fa/.busco/g')
 
+echo $outDir
 # Run BUSCO with the metaeuk mode
 busco -i $genome -o $outDir -m genome -l $lineage --offline -c 10
-
-
-
-
-
-
-
-
-
-
-
-
-
 
