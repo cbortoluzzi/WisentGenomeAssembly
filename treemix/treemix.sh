@@ -22,7 +22,7 @@ then
 
                 echo -e "OUTPUT:          <A maximum likelihood tree for the set of populations>\n\n"
 
-                echo -e "REQUIRES:        Requires plink (v1.90b6.18), BCFtools (v1.16), and VCFtools (0.1.16) available from PATH\n\n"
+                echo -e "REQUIRES:        Requires plink (v1.90b6.18), BCFtools (v1.16), and VCFtools (v0.1.16) available from PATH\n\n"
 
                 exit
 fi
