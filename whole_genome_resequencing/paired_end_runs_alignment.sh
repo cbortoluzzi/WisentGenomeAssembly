@@ -57,18 +57,10 @@ flowcell=`zcat $fastq_1 | head -n 1 | cut -f3 -d':'`
 lane=`zcat $fastq_1 | head -n 1 | cut -f4 -d':'`
 
 
-# Make sure that the reference genome is unmasked
-unmasked=`echo $ref | sed 's/.fasta//g' | sed 's/.fa//g'`
-if [[ ! -f $unmasked.rm.fasta ]];then
-	echo -e "Unmasked version of the reference genome not found. Making it now\n\n"
-	awk 'BEGIN{FS=" "}{if(!/>/){print toupper($0)}else{print $1}}' $ref > $unmasked.rm.fasta
-fi
-
-
 # Create index files for reference genome
-if [[ ! -f $unmasked.rm.fasta.bwt ]];then
+if [[ ! -f $$ref.bwt ]];then
 	echo -e "Index database sequences in the FASTA format not found. Making them now\n\n"
-	bwa index $unmasked.rm.fasta
+	bwa index $ref
 fi
 
 
@@ -77,7 +69,7 @@ fi
 if [[ ! -f bam/$name.bam ]];then
 	echo -e "Aligned BAM file not found for $sample. Making it now...this might take some time\n\n"
 	echo "@RG\tID:$flowcell.$lane\tPL:illumina\tSM:$sample\tPU:unknown\tCN:ETH"
-	bwa mem -t 16 -T 20 -R "@RG\tID:$name\tPL:illumina\tSM:$sample\tPU:unknown\tCN:ETH" $unmasked.rm.fasta $fastq_1 $fastq_2 | samblaster | samtools view -Sb - > bam/$name.bam
+	bwa mem -t 16 -T 20 -R "@RG\tID:$name\tPL:illumina\tSM:$sample\tPU:unknown\tCN:ETH" $ref $fastq_1 $fastq_2 | samblaster | samtools view -Sb - > bam/$name.bam
 fi
 
 # I have lowered the minimum score to output to 20 [default: 30]
