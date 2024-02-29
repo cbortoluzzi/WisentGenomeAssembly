@@ -74,6 +74,7 @@ make_dnaseg_eachID("Bos_taurus"),
 make_dnaseg_eachID("Bos_indicus"),
 make_dnaseg_eachID("Bos_gaurus"),
 make_dnaseg_eachID("Bos_mutus"),
+  make_dnaseg_eachID("Bos_grunniens"),
 make_dnaseg_eachID("Bubalus_bubalis")
 )
 names(dna_segs)=sID_list
@@ -85,6 +86,7 @@ make_annotation_eachID("Bos_taurus"),
 make_annotation_eachID("Bos_indicus"),
 make_annotation_eachID("Bos_gaurus"),
 make_annotation_eachID("Bos_mutus"),
+make_annotation_eachID("Bos_grunniens"),
 make_annotation_eachID("Bubalus_bubalis")
 )
 comparisons = list(
@@ -94,6 +96,7 @@ make_comp_eachID("03"),
 make_comp_eachID("04"),
 make_comp_eachID("05"),
 make_comp_eachID("06")
+make_comp_eachID("07")
 )
 
 left_offset = rep(c(0), times = length(dna_segs))
