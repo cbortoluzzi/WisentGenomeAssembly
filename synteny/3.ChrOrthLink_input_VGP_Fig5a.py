@@ -18,7 +18,7 @@ import pandas as pd
 #########################
 RefID_list = ["Bison_bonasus"]
 
-sID_LIST = ["Bison_bonasus", "Bison_bison", "Bos_taurus", "Bos_indicus", "Bos_gaurus", "Bos_mutus", "Bubalus_bubalis"]
+sID_LIST = ["Bison_bonasus", "Bison_bison", "Bos_taurus", "Bos_indicus", "Bos_gaurus", "Bos_mutus", "Bos_grunniens", "Bubalus_bubalis"]
 
 target_chr_name = "All" # or All
 
