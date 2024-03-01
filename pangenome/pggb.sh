@@ -16,7 +16,7 @@
 # Pangenome Sequence Naming : to change the sequence names according to PanSN-spec, we use fastix:
 ls input/*.fasta | while read f; do
         sample_name=$(echo $f | cut -f 1 -d '.')
-        ../../../alex/software/fastix/target/release/fastix -p "${sample_name}#1#" $f >> Bovidae.fasta
+        fastix -p "${sample_name}#1#" $f >> Bovidae.fasta
 done
 bgzip -@ 4 Bovidae.fasta
 samtools faidx Bovidae.fasta.gz
@@ -24,8 +24,8 @@ samtools faidx Bovidae.fasta.gz
 
 # Mash-based partitioning
 mash dist Bovidae.fasta.gz Bovidae.fasta.gz -s 10000 -i > Bovidae.distances.tsv
-python3 ../../softwares/pggb/mash2net.py -m Bovidae.distances.tsv
-python3 ../../softwares/pggb/net2communities.py -e Bovidae.distances.tsv.edges.list.txt -w Bovidae.distances.tsv.edges.weights.txt -n Bovidae.distances.tsv.vertices.id2name.txt
+python3 mash2net.py -m Bovidae.distances.tsv
+python3 net2communities.py -e Bovidae.distances.tsv.edges.list.txt -w Bovidae.distances.tsv.edges.weights.txt -n Bovidae.distances.tsv.vertices.id2name.txt
 
 seq 0 27 | while read i; do
         chromosomes=$(cat Bovidae.distances.tsv.edges.weights.txt.community.$i.txt | cut -f 3 -d '#' | sort | uniq | tr '\n' ' ');
