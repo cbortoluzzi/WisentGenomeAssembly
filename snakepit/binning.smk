@@ -28,7 +28,7 @@ rule meryl_count:
         mem_mb = 3000
     shell:
         '''
-        samtools fastq -@ {threads} --reference {config[reference]} -0 $TMPDIR/reads.fq.gz
+        samtools fastq -@ {threads} --reference {config[reference]} -0 $TMPDIR/reads.fq.gz {input}
         meryl count k=21 threads={threads} $TMPDIR/reads.fq.gz output {output}
         '''
 
@@ -51,5 +51,5 @@ rule genomescope2:
     conda: 'R'
     shell:
         '''
-        genomescope.R -i {input} -o {output} -k 21
+        /cluster/work/pausch/alex/software/genomescope2.0/genomescope.R -i {input} -o {output} -k 21
         '''
