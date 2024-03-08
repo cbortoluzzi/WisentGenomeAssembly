@@ -117,8 +117,6 @@ rule vg_deconstruct:
         '''
         vg deconstruct -p Bos_taurus -d 1 -e {input} |\
         bcftools norm -m -any |\
-        vcfwave -t 1 -L 1000000 -k |\
-        tee graphs/minigraph/{wildcards.chromosome}.vcf |\
         bcftools view -i 'abs(ILEN)>=50&&abs(ILEN)<=100000' |\
         bcftools query -f '[%GT]\\n' |\
         sed 's/\./0/g' |\
