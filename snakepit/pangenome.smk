@@ -115,12 +115,13 @@ rule vg_deconstruct:
         mem_mb = 7500
     shell:
         '''
-        vg deconstruct -p Bos_taurus -d 1 -e {input} |\
+        vg deconstruct -p Bos_taurus -a -d 1 -e {input} |\
         bcftools norm -m -any |\
         bcftools view -i 'abs(ILEN)>=50&&abs(ILEN)<=100000' |\
-        bcftools query -f '[%GT]\\n' |\
-        sed 's/\./0/g' |\
-        awk '{{++A[$1]}} END {{ for (k in A) {{print k,A[k]}} }}' > {output}
+        bcftools +setGT - -- -t . -n 0 |\
+        tee {wildcards.chromosome}.vcf |\
+        bcftools query -f '%REF %ALT [%GT]\\n' |\
+        awk '{{length($1)>length($2)?++A["0"$3]:++B["0"$3]}} END {{ for (k in A) {{print "DEL",k,A[k]}}; for (k in B) {{print "INS",k,B[k]}}; }}' > {output}
         '''
 
 rule count_SVs:
@@ -131,5 +132,5 @@ rule count_SVs:
     localrule: True
     shell:
         '''
-        awk '{{A[$1]+=$2}} END {{ for (k in A) {{print k,A[k]}} }}' {input} > {output}
+        awk '{{A[$1][$2]+=$3}} END {{ for (k in A) {{ for (V in A[k]) {{ print k,V,A[k][V] }} }} }}' {input} > {output}
         '''
