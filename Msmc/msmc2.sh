@@ -24,7 +24,7 @@ then
 
       	echo -e "OUTPUT:        <A reconstructed demographic history>\n\n"
 
-      	echo -e "REQUIRES:      Requires BCFtools (1.16), bwa (v0.7.17), msmc2, and R (v4.2.2) available from PATH\n\n"
+      	echo -e "REQUIRES:      Requires BCFtools (1.19), bwa (v0.7.17), msmc2, and R (v4.2.2) available from PATH\n\n"
 
 	exit
 fi
@@ -41,7 +41,7 @@ coverage=$3
 
 # Load module
 module load r/4.2.2
-module load bcftools
+module load bcftools/1.19
 module load bwa/0.7.17
 
 
