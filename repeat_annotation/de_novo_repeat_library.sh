@@ -22,7 +22,7 @@ then
 
         echo -e "OUTPUT:        <a de novo repeat library>      A species-specific de novo repeat library\n\n"
 
-        echo -e "REQUIRES:      Requires RepeatModeler (v2.0.4), samtools (v1.15.1) and Genometools (v1.6.2) accessible from PATH\n\n"
+        echo -e "REQUIRES:      Requires RepeatModeler (v2.0.4), samtools (v1.19.2) and Genometools (v1.6.2) accessible from PATH\n\n"
 
         exit
 fi
