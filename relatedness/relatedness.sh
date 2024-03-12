@@ -23,14 +23,14 @@ then
         echo -e "OUTPUT:          <A filtered VCF file>           A filtered VCF file (bi-allelic SNPs, indels excluded)"
         echo -e "                 <A relatedness statistics>      A relatedness statistic for each individual\n\n"
 
-        echo -e "REQUIRES:        Requires VCFtools (v0.1.16) and BCFtools (v1.6) available from PATH\n\n"
+        echo -e "REQUIRES:        Requires VCFtools (v0.1.16) and BCFtools (v1.19) available from PATH\n\n"
 
         exit
 fi
 
 
 # Load modules
-module load bcftools/1.6
+module load bcftools/1.19
 module load vcftools
 
 
