@@ -26,14 +26,14 @@ then
 	echo -e "OUTPUT:        <A filtered VCF file with called genotypes>"
 	echo -e "               <A summary statistics file for each filtered VCF file>\n\n"
 
-	echo -e "REQUIRES:      Requires freebayes (v0.9.21), BCftools (v1.15.1) and VCFtools (v0.1.16) available from PATH\n\n"
+	echo -e "REQUIRES:      Requires freebayes (v0.9.21), BCftools (v1.19) and VCFtools (v0.1.16) available from PATH\n\n"
   exit
 fi
 
 
 
 # Load modules
-module load bcftools/1.15.1
+module load bcftools/1.19
 module load vcftools/0.1.16
 module load htslib/1.15.1
 
