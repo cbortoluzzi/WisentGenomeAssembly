@@ -36,15 +36,12 @@ rule mdbg:
     input:
         rules.samtools_fastq.output
     output:
-        'mdbg_assembly/hap{haplotype}.wa'
+        'mdbg_assembly/hap{haplotype}.fa'
     params:
         lambda wildcards, output: PurePath(output[0]).with_suffix('')
-    threads: 16
+    threads: 8
     resources:
-        mem_mb = 1500,
-        constraint = "EPYC_7H12"
-    conda:
-        'rusty'
+        mem_mb = 2500
     shell:
         '''
         /cluster/work/pausch/alex/software/rust-mdbg/target/release/rust-mdbg --threads {threads} -k 21 -d 0.003 -l 14 --prefix {params} {input}
