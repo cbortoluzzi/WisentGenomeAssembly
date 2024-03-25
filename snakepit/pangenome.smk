@@ -134,3 +134,39 @@ rule count_SVs:
         '''
         awk '{{A[$1][$2]+=$3}} END {{ for (k in A) {{ for (V in A[k]) {{ print k,V,A[k][V] }} }} }}' {input} > {output}
         '''
+
+
+rule vep:
+    input:
+        vcf = rules.vg_deconstruct.output,
+        gff = config['gff'],
+        reference = config['reference']
+    output:
+        stats = 'vep/{chromosome}.vep.stats',
+        vcf = 'vep/{chromosome}.vep.vcf.gz'
+    threads: 1
+    resources:
+        mem_mb = 5000
+    shell:
+        '''
+        perl -e 'use DBI;'
+        vep --plugin SpliceRegion \
+        -i {input.vcf} \
+        -gff {input.gff} \
+        -fasta {input.reference} \
+        --hgvs --symbol -o stdout \
+        --stats_file {output.stats}
+        --vcf | bgzip -p {threads} -c > {output.vcf}
+        '''
+
+rule vep_filter:
+    input:
+        rules.vep.output['vcf']
+    output:
+        'vep.HIGH.vcf'
+    localrule: True
+    shell:
+        '''
+        zcat {input} | awk '$11==1&&$10==1&&($11 + $10 + $12 +$13 +$14 +$15+$16)==2&&$0~/HIGH/ {{print $1, $2, $3, $4, $5, $6, $7, $8, $9}}' > {output}
+        #bcftools +split-vep -c IMPACT {input.vcf} | bcftools view -s Bison_bison,Bison_bonasus -x -i 'INFO/IMPACT=="HIGH"' | cut -f -9 > {output}
+        '''
