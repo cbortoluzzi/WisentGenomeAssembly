@@ -110,7 +110,8 @@ rule vg_deconstruct:
     input:
         rules.minigraph_path.output
     output:
-        'SVs.{chromosome}.count'
+        vcf = '{chromosome}.vcf',
+        SVs = 'SVs.{chromosome}.count'
     resources:
         mem_mb = 7500
     shell:
@@ -119,14 +120,14 @@ rule vg_deconstruct:
         bcftools norm -m -any |\
         bcftools view -i 'abs(ILEN)>=50&&abs(ILEN)<=100000' |\
         bcftools +setGT - -- -t . -n 0 |\
-        tee {wildcards.chromosome}.vcf |\
+        tee {output.vcf} |\
         bcftools query -f '%REF %ALT [%GT]\\n' |\
-        awk '{{length($1)>length($2)?++A["0"$3]:++B["0"$3]}} END {{ for (k in A) {{print "DEL",k,A[k]}}; for (k in B) {{print "INS",k,B[k]}}; }}' > {output}
+        awk '{{length($1)>length($2)?++A["0"$3]:++B["0"$3]}} END {{ for (k in A) {{print "DEL",k,A[k]}}; for (k in B) {{print "INS",k,B[k]}}; }}' > {output.SVs}
         '''
 
 rule count_SVs:
     input:
-        expand(rules.vg_deconstruct.output,chromosome=range(1,30))
+        expand(rules.vg_deconstruct.output['SVs'],chromosome=range(1,30))
     output:
         'SVs.count'
     localrule: True
@@ -135,10 +136,9 @@ rule count_SVs:
         awk '{{A[$1][$2]+=$3}} END {{ for (k in A) {{ for (V in A[k]) {{ print k,V,A[k][V] }} }} }}' {input} > {output}
         '''
 
-
 rule vep:
     input:
-        vcf = rules.vg_deconstruct.output,
+        vcf = rules.vg_deconstruct.output['vcf'],
         gff = config['gff'],
         reference = config['reference']
     output:
