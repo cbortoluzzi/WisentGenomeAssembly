@@ -110,8 +110,8 @@ rule vg_deconstruct:
     input:
         rules.minigraph_path.output
     output:
-        vcf = '{chromosome}.vcf',
-        SVs = 'SVs.{chromosome}.count'
+        vcf = 'SVs/{chromosome}.vcf',
+        SVs = 'SVs/{chromosome}.count'
     resources:
         mem_mb = 7500
     shell:
@@ -129,7 +129,7 @@ rule count_SVs:
     input:
         expand(rules.vg_deconstruct.output['SVs'],chromosome=range(1,30))
     output:
-        'SVs.count'
+        'SVs/autosomes.count'
     localrule: True
     shell:
         '''
@@ -163,7 +163,7 @@ rule vep_filter:
     input:
         rules.vep.output['vcf']
     output:
-        'vep.HIGH.vcf'
+        'vep/HIGH.vcf'
     localrule: True
     shell:
         '''
