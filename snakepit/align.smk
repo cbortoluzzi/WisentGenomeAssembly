@@ -42,7 +42,7 @@ rule fastq_dl_fixed:
         temp('publicSamples/fastq/{accession}_R{N}.fixed.fastq.gz')
     threads: 4
     resources:
-        mem_mb = 1500
+        mem_mb = 10000
     shell:
         '''
         pigz -dc -p {threads} {input.fastq} | awk '{{print (NR%4==1 && NF>1) ? "@"$2  : $0}}' | pigz -c -p {threads} > {output}
@@ -85,7 +85,7 @@ rule short_read_align:
         aligner_command = lambda wildcards, input: generate_SR_aligner_command(wildcards,input)
     threads: lambda wildcards: 24 if wildcards.mapper == 'bwa' else 12
     resources:
-        mem_mb = 3000,
+        mem_mb = 4500,
         scratch = '50g',
         walltime = '24h'
     shell:
@@ -122,10 +122,10 @@ rule strobealign:
 
 rule samtools_depth:
     input:
-        cram = rules.strobealign.output['bam'],
+        cram = rules.short_read_align.output['bam'],
         reference = lambda wildcards: config['reference'][wildcards.reference]
     output:
-        'publicSamples/{sample}.{reference}.cov'
+        'publicSamples/{sample}.{reference}.{mapper}.cov'
     resources:
         walltime = '15m'
     shell:
@@ -136,7 +136,7 @@ rule samtools_depth:
 
 rule collate_depths:
     input:
-        expand(rules.samtools_depth.output,sample=samples,reference=('ARS',))
+        expand(rules.samtools_depth.output,sample=samples,reference=('ARS',),mapper=('bwa',))
     output:
         'publicSamples/coverage.csv.gz'
     localrule: True
