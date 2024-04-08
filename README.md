@@ -12,6 +12,10 @@ Set of scripts to run the analyses presented in Bortoluzzi et al. (2024), includ
 
 The repository contains also scripts to run analyses that were not included in the final manuscript (e.g., treemix, admixture, MSMC, PCA, relatedness).
 
+## Requirements
+python v3.8.16
+R v4.0.2
+
 ## Citation
 
 Please cite the pre-print below when using the pipeline/scripts in your research:
