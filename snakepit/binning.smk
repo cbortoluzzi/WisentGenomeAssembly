@@ -6,7 +6,7 @@ rule all:
 
 rule get_tagged_alignments:
     input:
-        cram = '/cluster/work/pausch/alex/NEW_ASSEMBLY/alignments/{sample}.mm2.cram' #'/nfs/nas12.ethz.ch/fs1201/green_groups_tg_public/data/long_reads/{sample}/alignment/{sample}.mm2.cram'
+        cram = '/cluster/work/pausch/alex/NEW_ASSEMBLY/alignments/{sample}.mm2.cram' 
     output:
         'triobin/{sample}.tagged_reads.csv.gz'
     resources:
