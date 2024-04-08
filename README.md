@@ -1,1 +1,1 @@
-# wise_ant
+# Wisent genome assembly
