@@ -19,6 +19,6 @@ python v3.8.16; R v4.0.2
 
 Please cite the pre-print below when using the pipeline/scripts in your research:
 
-[Chiara Bortoluzzi, Xena Marie Mapel, Stefan Neuenschwander, Fredi Janett, Hubert Pausch, Alexander S. Leonard. 2024. Wisent genome assembly uncovers extended runs of homozygosity and a large deletion that inactivates the thyroid hormone responsive gene. bioRxiv. doi: https://doi.org/10.1101/2024.04.08.588592]
+Chiara Bortoluzzi, Xena Marie Mapel, Stefan Neuenschwander, Fredi Janett, Hubert Pausch, Alexander S. Leonard. 2024. Wisent genome assembly uncovers extended runs of homozygosity and a large deletion that inactivates the thyroid hormone responsive gene. bioRxiv (doi: https://doi.org/10.1101/2024.04.08.588592).
 
  
