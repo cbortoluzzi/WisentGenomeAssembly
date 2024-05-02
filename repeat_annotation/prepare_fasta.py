@@ -43,12 +43,12 @@ def change_header_naming_fasta(mydict, fasta, output):
 				new_header = mydict[header]
 				record.id = new_header
 				record.description = ''
-				#record.seq = record.seq.upper()
+				record.seq = record.seq.upper()
 				SeqIO.write(record, output_f, "fasta")
 			except KeyError:
 				record.id = header
 				record.description = ''
-				#record.seq = record.seq.upper()
+				record.seq = record.seq.upper()
 				SeqIO.write(record, output_f, "fasta")
 
 
