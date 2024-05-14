@@ -29,7 +29,7 @@ col_vec_comp = c("black","grey","lightgrey","white","blue",makeTransparent(col_v
 ###############################################################
 library(genoPlotR)
 
-RefID = "Bison_bonasus"
+RefID = "Bubalus_bubalis"
 
 # read species IDs
 iNAME_sID = paste0("BUSCO_genoPlotR_input/",RefID,"/sID_list.txt")
@@ -68,26 +68,26 @@ return(comparisonX)
 }
 
 dna_segs = list(
-make_dnaseg_eachID("Bison_bonasus"),
-make_dnaseg_eachID("Bison_bison"),
-make_dnaseg_eachID("Bos_taurus"),
-make_dnaseg_eachID("Bos_indicus"),
+make_dnaseg_eachID("Bubalus_bubalis"),
 make_dnaseg_eachID("Bos_gaurus"),
+make_dnaseg_eachID("Bos_indicus"),
+make_dnaseg_eachID("Bos_taurus"),
+make_dnaseg_eachID("Bos_grunniens"),
 make_dnaseg_eachID("Bos_mutus"),
-  make_dnaseg_eachID("Bos_grunniens"),
-make_dnaseg_eachID("Bubalus_bubalis")
+make_dnaseg_eachID("Bison_bison"),
+make_dnaseg_eachID("Bison_bonasus")
 )
 names(dna_segs)=sID_list
 
 annotations = list(
-make_annotation_eachID("Bison_bonasus"),
-make_annotation_eachID("Bison_bison"),
-make_annotation_eachID("Bos_taurus"),
-make_annotation_eachID("Bos_indicus"),
+make_annotation_eachID("Bubalus_bubalis"),
 make_annotation_eachID("Bos_gaurus"),
-make_annotation_eachID("Bos_mutus"),
+make_annotation_eachID("Bos_indicus"),
+make_annotation_eachID("Bos_taurus"),
 make_annotation_eachID("Bos_grunniens"),
-make_annotation_eachID("Bubalus_bubalis")
+make_annotation_eachID("Bos_mutus"),
+make_annotation_eachID("Bison_bison"),
+make_annotation_eachID("Bison_bonasus")
 )
 comparisons = list(
 make_comp_eachID("01"),
@@ -95,7 +95,7 @@ make_comp_eachID("02"),
 make_comp_eachID("03"),
 make_comp_eachID("04"),
 make_comp_eachID("05"),
-make_comp_eachID("06")
+make_comp_eachID("06"),
 make_comp_eachID("07")
 )
 
@@ -104,4 +104,3 @@ left_offset = rep(c(0), times = length(dna_segs))
 pdf(paste0("synteny_Bison_bonasus.pdf"),5.4,6)
 plot_gene_map(dna_segs=dna_segs, comparisons=comparisons, minimum_gap_size = 0.5, offsets = left_offset, scale_cex = 0, scale = FALSE)
 dev.off()
-
