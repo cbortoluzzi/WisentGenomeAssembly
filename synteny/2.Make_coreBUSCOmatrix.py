@@ -13,7 +13,7 @@ import pandas as pd
 #    GLOBAL_VARIABLE    #
 #########################
 
-Ref_BUSCO = "BUSCO_Bison_bonasus.txt" # BUSCO_[assemblyID].txt
+Ref_BUSCO = "BUSCO_Bubalus_bubalis.txt" # BUSCO_[assemblyID].txt
 #wdPATH = "synteny/"
 #BUSCO_iPATH = wdPATH+"input/BUSCO/"
 
