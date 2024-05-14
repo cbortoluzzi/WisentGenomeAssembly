@@ -16,9 +16,10 @@ import pandas as pd
 #########################
 #    GLOBAL_VARIABLE    #
 #########################
-RefID_list = ["Bison_bonasus"]
+RefID_list = ["Bubalus_bubalis"]
 
-sID_LIST = ["Bison_bonasus", "Bison_bison", "Bos_taurus", "Bos_indicus", "Bos_gaurus", "Bos_mutus", "Bos_grunniens", "Bubalus_bubalis"]
+sID_LIST = ["Bubalus_bubalis", "Bos_gaurus", "Bos_indicus", "Bos_taurus", "Bos_grunniens", "Bos_mutus", "Bison_bison", "Bison_bonasus"]
+
 
 target_chr_name = "All" # or All
 
@@ -516,6 +517,7 @@ def make_comparisonFiles(RefID, fNAME_BUSCO, sID_nChrom_iAddLen_dic, nRefChrom_n
 	# Write comparison
 	iCNT_comparison = 0
 	tmp_s1_Pos_list = sID_nPos_dic[sID_list[0]]
+	print (sID_nPos_dic)
 	for sID in sID_list[1:]:
 		iCNT_comparison += 1
 		if len(str(iCNT_comparison))==1:
@@ -591,5 +593,3 @@ for RefID in RefID_list:
 		sID_SortedChr_dic = make_sID_SortedChrByChromNumb_dic(fNAME_SortedBuscoCoreMatrix)
 	sID_nChrom_iAddLen_dic, nRefChrom_nColCode_dic, sID_sumLen_dic = make_dnasegFiles_AdjLenDic_LinkColDic(RefID,iPATH_chrsize,sID_SortedChr_dic,oPATH)
 	sID_list, iCNT_RefChr = make_comparisonFiles(RefID, fNAME_BuscoCoreMatrix, sID_nChrom_iAddLen_dic, nRefChrom_nColCode_dic, sID_sumLen_dic, oPATH)
-
-
